@@ -10,10 +10,15 @@ const randomRange = (min, max) => {
     return Math.random() * (max - min) + min;
 }
 
+// Maps a number from one range to another. 
+const mapRange = (value, fromLow, fromHigh, toLow, toHigh) => {
+  return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
+}
+
 
 // Shape type
 class Point{
-    constructor(x, y) {
+    constructor(x, y, r) {
         this.x = x;
         this.y = y;
     }
@@ -22,18 +27,20 @@ class Point{
     getDistance(v) {
         const dx = this.x - v.x;
         const dy = this.y - v.y;
+
+        //console.log(dx);
+
         return Math.sqrt(dx * dx + dy * dy);
     }
 }
 
 
 class Shape{
-    constructor(x, y) {
+    constructor(x, y, r) {
         this.cordinate = new Point(x, y);
-
         // Speed by which the points moves.
         this.velocity = new Point(randomRange(-1, 1), randomRange(-1, 1))
-        this.radius = randomRange(1, 6);
+        this.radius = 5;
     }
 
     // Move the point.
@@ -74,7 +81,7 @@ const skatch = (width, height) => {
     for (let i = 0; i < shapeQuantity; i++) {
         const x = randomRange(0, width);
         const y = randomRange(0, height);
-        
+
         shapes.push(new Shape(x, y))
     }
 
@@ -92,11 +99,14 @@ const skatch = (width, height) => {
                 point2 = shapes[j];
 
                 // Get the distance of the hypotenuse.
-                const dist = point1.cordinate.getDistance(point2.cordinate);
+                const dist = point1.cordinate.getDistance(point2.cordinate);            
                 if (dist > 200) continue;
-
-                context.lineWidth = 0.6;
+      
+                context.lineWidth = mapRange(dist, 0, 200, 5, 0.5);
                 context.strokeStyle = '#c49ae1';
+                
+                // Increase the radius based on the distance between points.
+                shapes[i].radius = mapRange(dist, 0, 200, 12, 3);
 
                 context.beginPath();
                 context.moveTo(point1.cordinate.x, point1.cordinate.y);
