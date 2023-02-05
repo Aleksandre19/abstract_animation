@@ -102,7 +102,7 @@ const skatch = (width, height) => {
                 const dist = point1.cordinate.getDistance(point2.cordinate);            
                 if (dist > 200) continue;
       
-                context.lineWidth = mapRange(dist, 0, 200, 5, 0.5);
+                context.lineWidth = mapRange(dist, 0, 200, 4, 0.5);
                 context.strokeStyle = '#c49ae1';
                 
                 // Increase the radius based on the distance between points.
